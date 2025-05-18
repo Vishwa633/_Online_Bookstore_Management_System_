@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Book Store</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        .books-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 120px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            transition: transform 0.3s ease;
+            border: 2px solid #e0e0e0;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: #089da1;
+        }
+
+        .book-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            border-radius: 4px;
+            background: #fff;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .book-info {
+            padding: 10px 0;
+        }
+
+        .book-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .book-author {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .book-price {
+            color: #089da1;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .add-to-cart {
+            background: #089da1;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .add-to-cart:hover {
+            background: #089da1;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .search-bar input {
+            padding: 13px;
+            width: 450px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            padding: 13px 20px;
+            background: #089da1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        section {
+            min-height: 80vh;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        section {
+            flex: 1;
+        }
+
+        .sort-btn {
+            border: 2px solid #089da1;
+            background: #f8fafd;
+            color: #089da1;
+            border-radius: 2em;
+            padding: 0.5em 1.5em;
+            margin: 0 0.3em;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .sort-btn:hover, .sort-btn.active {
+            background: #089da1;
+            color: #fff;
+            border-color: #089da1;
+        }
+        .sort-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            margin-bottom: 1.5em;
+        }
+
+        .cart-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #089da1;
+            color: #fff;
+            font-size: 0.85em;
+            padding: 2px 7px;
+            border-radius: 50%;
+            min-width: 22px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <nav style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo">
+                <img src="image/logo.png" alt="Book Store Logo">
+            </div>
+            <ul style="display: flex; justify-content: center; align-items: center; flex: 1; gap: 2.5em; margin: 0; padding: 0; list-style: none; font-size: 1.1em; font-weight: 500;">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="books.html" class="active">Books</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+            </ul>
+            <div class="social_icon" style="display: flex; align-items: center; gap: 1.2em; margin-right: 2.5em;">
+                <span class="cart-wrapper" style="position:relative;cursor:pointer;" onclick="window.location.href='cart.html'">
+                    <i class="fa-solid fa-cart-shopping" style="font-size:1.6rem;"></i>
+                    <span id="cart-count" style="position:absolute;top:-8px;right:-10px;background:#089da1;color:#fff;font-size:0.85em;padding:2px 7px;border-radius:50%;min-width:22px;text-align:center;">0</span>
+                </span>
+                <div id="profileDropdownContainer" style="margin-left:0;"></div>
+            </div>
+        </nav>
+
+        <div id="admin-actions" style="text-align:right; margin: 20px 40px 0 0; display:none;">
+            <button id="manageBooksBtn" style="background:#089da1;color:#fff;padding:10px 22px;border:none;border-radius:6px;font-size:1rem;cursor:pointer;" onclick="window.location.href='managebooks.html'">
+                Manage Books
+            </button>
+        </div>
+
+        <div class="books-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search books...">
+                <button onclick="searchBooks()">Search</button>
+            </div>
+
+            <div class="sort-bar" style="text-align:left; margin: 20px 0 30px 0;">
+                <span style="font-weight:600; font-size:1.1em; color:#333;">Sort by:</span>
+                <button class="sort-btn" onclick="sortAndDisplayBooks('title')">Title</button>
+                <button class="sort-btn" onclick="sortAndDisplayBooks('price')">Price</button>
+                <!-- <button class="sort-btn" onclick="sortAndDisplayBooks('rating')">Rating</button> -->
+            </div>
+
+            <div class="books-grid" id="booksGrid">
+                <!-- Books will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer_main">
+            <div class="tag">
+                <img src="image/logo.png" alt="Book Store Logo">
+                <p>
+                    Your one-stop destination for all your reading needs. Explore our vast collection and enjoy a seamless book shopping experience!
+                </p>
+            </div>
+            <div class="tag">
+                <h1>Quick Link</h1>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="books.html">Books</a>
+                <a href="reviews.html">Reviews</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+            <div class="tag">
+                <h1>Contact Info</h1>
+                <a href="tel:+94 12 345 6789"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+                <a href="tel:+94 32 444 699"><i class="fa-solid fa-phone"></i>+94 32 444 699</a>
+                <a href="mailto:bookstore123@gmail.com"><i class="fa-solid fa-envelope"></i>bookstore123@gmail.com</a>
+            </div>
+            <div class="tag">
+                <h1>Follow Us</h1>
+                <div class="social_link">
+                    <a href="https://www.facebook.com"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.twitter.com"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="end">Design By<span><i class="fa-solid fa-face-grin"></i> Progect Group 10</span></p>
+    </footer>
+
+    <script>
+        let localCartCount = 0;
+
+        // Sample book data
+        const books = [
+            {
+                id: 1,
+                title: "The Great Gatsby",
+                author: "F. Scott Fitzgerald",
+                price: 19.99,
+                image: "image/book1.jpg"
+            },
+            {
+                id: 2,
+                title: "To Kill a Mockingbird",
+                author: "Harper Lee",
+                price: 15.99,
+                image: "image/book2.jpg"
+            },
+            {
+                id: 3,
+                title: "1984",
+                author: "George Orwell",
+                price: 14.99,
+                image: "image/book3.jpg"
+            },
+            {
+                id: 4,
+                title: "Pride and Prejudice",
+                author: "Jane Austen",
+                price: 12.99,
+                image: "image/book4.jpg"
+            },
+            {
+                id: 5,
+                title: "The Catcher in the Rye",
+                author: "J.D. Salinger",
+                price: 13.99,
+                image: "image/book5.jpg"
+            },
+            {
+                id: 6,
+                title: "The Hobbit",
+                author: "J.R.R. Tolkien",
+                price: 16.99,
+                image: "image/book6.jpg"
+            },
+            {
+                id: 7,
+                title: "The Lord of the Rings",
+                author: "J.R.R. Tolkien",
+                price: 24.99,
+                image: "image/book7.jpg"
+            },
+            {
+                id: 8,
+                title: "Harry Potter and the Sorcerer's Stone",
+                author: "J.K. Rowling",
+                price: 17.99,
+                image: "image/book8.jpg"
+            },
+            {
+                id: 9,
+                title: "The Alchemist",
+                author: "Paulo Coelho",
+                price: 11.99,
+                image: "image/book9.jpg"
+            },
+            {
+                id: 10,
+                title: "The Little Prince",
+                author: "Antoine de Saint-Exupéry",
+                price: 9.99,
+                image: "image/book10.jpg"
+            },
+            {
+                id: 11,
+                title: "The Da Vinci Code",
+                author: "Dan Brown",
+                price: 15.99,
+                image: "image/book11.jpg"
+            },
+            {
+                id: 12,
+                title: "The Kite Runner",
+                author: "Khaled Hosseini",
+                price: 14.99,
+                image: "image/book12.jpg"
+            },
+            {
+                id: 13,
+                title: "The Hunger Games",
+                author: "Suzanne Collins",
+                price: 13.99,
+                image: "image/book13.jpg"
+            },
+            {
+                id: 14,
+                title: "The Fault in Our Stars",
+                author: "John Green",
+                price: 12.99,
+                image: "image/book14.jpg"
+            },
+            {
+                id: 15,
+                title: "The Book Thief",
+                author: "Markus Zusak",
+                price: 14.99,
+                image: "image/book15.jpg"
+            },
+            {
+                id: 16,
+                title: "The Giver",
+                author: "Lois Lowry",
+                price: 11.99,
+                image: "image/book16.jpg"
+            },
+            {
+                id: 17,
+                title: "The Chronicles of Narnia",
+                author: "C.S. Lewis",
+                price: 19.99,
+                image: "image/book17.jpg"
+            },
+            {
+                id: 18,
+                title: "The Secret Garden",
+                author: "Frances Hodgson Burnett",
+                price: 9.99,
+                image: "image/book18.jpg"
+            },
+            {
+                id: 19,
+                title: "The Picture of Dorian Gray",
+                author: "Oscar Wilde",
+                price: 10.99,
+                image: "image/book19.jpg"
+            },
+            {
+                id: 20,
+                title: "The Adventures of Sherlock Holmes",
+                author: "Arthur Conan Doyle",
+                price: 12.99,
+                image: "image/book20.jpg"
+            }
+        ];
+
+        // Function to display books
+        function displayBooks(booksToShow) {
+            const booksGrid = document.getElementById('booksGrid');
+            booksGrid.innerHTML = '';
+
+            booksToShow.forEach(book => {
+                const bookCard = `
+                    <div class="book-card">
+                        <img src="${book.image}" alt="${book.title}" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">${book.title}</div>
+                            <div class="book-author">${book.author}</div>
+                            <div class="book-price">$${book.price}</div>
+                            <button class="add-to-cart" onclick="addToCart(${book.id})">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                booksGrid.innerHTML += bookCard;
+            });
+        }
+
+        // Function to search books
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const books = JSON.parse(localStorage.getItem('books') || '[]');
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(searchTerm) || 
+                book.author.toLowerCase().includes(searchTerm)
+            );
+            displayBooks(filteredBooks);
+        }
+
+        // Function to add to cart
+        function addToCart(bookId) {
+            const userId = localStorage.getItem('userId') || localStorage.getItem('cartGuestId');
+            if (!userId) {
+                alert('Please log in to add items to cart');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            fetch(`/api/cart/${userId}/add?itemId=${bookId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add to cart');
+                }
+                return response.text();
+            })
+            .then(() => {
+                alert('Book added to cart successfully!');
+                updateCartCount();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add book to cart. Please try again.');
+            });
+        }
+
+        function updateCartCount() {
+            const userId = localStorage.getItem('userId') || localStorage.getItem('cartGuestId');
+            if (!userId) return;
+
+            fetch(`/api/cart/${userId}`)
+                .then(res => res.json())
+                .then(items => {
+                    const count = items.reduce((total, item) => total + item.quantity, 0);
+                    document.getElementById('cart-count').textContent = count;
+                })
+                .catch(error => console.error('Error updating cart count:', error));
+        }
+
+        // Function to check login status
+        function checkLoginStatus() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const userObj = JSON.parse(user);
+                // Update navigation
+                document.querySelector('a[href="login.html"]').textContent = 'Logout';
+                document.querySelector('a[href="login.html"]').onclick = function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = 'index.html';
+                };
+                // Hide Register button for logged-in users
+                var registerLink = document.querySelector('a[href="register.html"]');
+                if (registerLink) {
+                    registerLink.style.display = 'none';
+                }
+                return true;
+            }
+            return false;
+        }
+
+        // Check login status on page load
+        window.onload = function() {
+            if (!checkLoginStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            fetchAndDisplayBooks();
+            const user = localStorage.getItem('user');
+            if (user) {
+                const searchIcon = document.querySelector('.fa-magnifying-glass');
+                if (searchIcon) searchIcon.remove();
+            }
+        }
+
+        function sortAndDisplayBooks(by) {
+            const books = JSON.parse(localStorage.getItem('books') || '[]');
+            let sortedBooks = [...books];
+            
+            if (by === 'title') {
+                sortedBooks.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (by === 'price') {
+                sortedBooks.sort((a, b) => a.price - b.price);
+            }
+            displayBooks(sortedBooks);
+
+            // Highlight the active button
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            if (by) {
+                document.querySelector(`.sort-btn[onclick*="${by}"]`).classList.add('active');
+            }
+        }
+
+        // Function to fetch and display books
+        async function fetchAndDisplayBooks() {
+            try {
+                // Get books from localStorage
+                let books = JSON.parse(localStorage.getItem('books') || '[]');
+                
+                // If no books in localStorage, fetch from API
+                if (books.length === 0) {
+                    const response = await fetch('/api/books');
+                    books = await response.json();
+                    // Store in localStorage for future use
+                    localStorage.setItem('books', JSON.stringify(books));
+                }
+                
+                displayBooks(books);
+            } catch (error) {
+                console.error('Error fetching books:', error);
+                alert('Error loading books. Please try again later.');
+            }
+        }
+
+        // Profile dropdown logic
+        function renderProfileDropdown() {
+            const container = document.getElementById('profileDropdownContainer');
+            let user = localStorage.getItem('user');
+            let dropdownHTML = `
+                <div class="profile-dropdown">
+                    <i class="fa-solid fa-user-circle" id="profileIcon" style="font-size:2rem;cursor:pointer;"></i>
+                    <div class="dropdown-content" id="profileDropdownContent" style="display:none;position:absolute;right:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.15);border-radius:8px;min-width:240px;z-index:1001;padding:1rem;">
+            `;
+            if (user) {
+                user = JSON.parse(user);
+                dropdownHTML += `
+                    <div style='font-weight:600;font-size:1.1em;margin-bottom:0.5em;'><span style='color:#888;'>Name:</span> ${user.username || 'User'}</div>
+                    <div style='color:#666;margin-bottom:1em;'><span style='color:#888;'>Email:</span> ${user.email || ''}</div>
+                    <button id="logoutBtn" style="width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;">Logout</button>
+                `;
+                if (!user.role || user.role.toUpperCase() !== 'ADMIN') {
+                    dropdownHTML += `<button id="deleteAccountBtn" style="width:100%;background:#fff;color:#ef4444;padding:0.5em 0;border:1.5px solid #ef4444;border-radius:6px;cursor:pointer;">Delete Account</button>`;
+                }
+            } else {
+                dropdownHTML += `
+                    <button id="loginBtn" style="width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;">Login</button>
+                    <button id="registerBtn" style="width:100%;background:#fff;color:#089da1;padding:0.5em 0;border:1.5px solid #089da1;border-radius:6px;cursor:pointer;">Register</button>
+                `;
+            }
+            dropdownHTML += '</div></div>';
+            container.innerHTML = dropdownHTML;
+            // Toggle dropdown
+            document.getElementById('profileIcon').onclick = function(e) {
+                e.stopPropagation();
+                const dropdown = document.getElementById('profileDropdownContent');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            };
+            // Hide dropdown on outside click
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('profileDropdownContent');
+                if (dropdown) dropdown.style.display = 'none';
+            });
+            // Logout
+            if (document.getElementById('logoutBtn')) {
+                document.getElementById('logoutBtn').onclick = function() {
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+            }
+            // Delete Account
+            if (document.getElementById('deleteAccountBtn')) {
+                document.getElementById('deleteAccountBtn').onclick = async function() {
+                    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
+                    const username = user.username;
+                    try {
+                        const response = await fetch(`/api/users/delete/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                        const result = await response.text();
+                        if (response.ok) {
+                            alert('Account deleted successfully.');
+                            localStorage.removeItem('user');
+                            window.location.href = 'index.html';
+                        } else {
+                            alert(result || 'Failed to delete account.');
+                        }
+                    } catch (err) {
+                        alert('Error deleting account.');
+                    }
+                };
+            }
+            // Login/Register
+            if (document.getElementById('loginBtn')) {
+                document.getElementById('loginBtn').onclick = function() {
+                    window.location.href = 'login.html';
+                };
+            }
+            if (document.getElementById('registerBtn')) {
+                document.getElementById('registerBtn').onclick = function() {
+                    window.location.href = 'register.html';
+                };
+            }
+        }
+        // Call on load
+        renderProfileDropdown();
+    </script>
+</body>
+</html> 

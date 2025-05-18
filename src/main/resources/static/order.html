@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/favicon.png" />
+    <meta charset="UTF-8">
+    <title>Create Your Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f8ff;
+            color: #222831;
+        }
+        .section-title {
+            background: linear-gradient(90deg, #089da1 70%, #b5eaeb 100%);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 8px rgba(8, 157, 161, 0.08);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .card {
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(8, 157, 161, 0.08);
+            border: none;
+        }
+        .btn-success, .btn-success:focus, .btn-success:active {
+            background: #089da1 !important;
+            border-color: #089da1 !important;
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(8, 157, 161, 0.10);
+            transition: background 0.2s;
+        }
+        .btn-success:hover {
+            background: #0bbfc3 !important;
+            border-color: #0bbfc3 !important;
+            color: #fff;
+        }
+        .order-summary th {
+            background: #b5eaeb !important;
+            color: #089da1;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border-bottom: 2px solid #089da1;
+        }
+        .order-summary td {
+            background: #fff;
+            color: #222831;
+        }
+        .order-status {
+            background: #e6fcfb;
+            border-left: 5px solid #089da1;
+            color: #089da1;
+            font-weight: 500;
+        }
+        .form-check-input:checked {
+            background-color: #089da1;
+            border-color: #089da1;
+        }
+        a.btn-success {
+            background: #089da1 !important;
+            border-color: #089da1 !important;
+        }
+        a.btn-success:hover {
+            background: #0bbfc3 !important;
+            border-color: #0bbfc3 !important;
+        }
+        label.form-label {
+            font-weight: 500;
+            color: #089da1;
+        }
+        h5 {
+            color: #089da1;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .form-control:focus {
+            border-color: #089da1;
+            box-shadow: 0 0 0 0.2rem rgba(8, 157, 161, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="cart.html" class="btn btn-success mb-3">&larr; Back to Cart</a>
+    </div>
+    <div class="card shadow">
+        <div class="section-title">
+            <h4 class="mb-0">Create Your Order</h4>
+            <small>Please review your order details before confirming</small>
+        </div>
+        <div class="card-body">
+            <!-- Customer Information -->
+            <h5>Customer Information</h5>
+            <form method="post" th:action="@{/order/confirm}">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="fullName" th:value="${fullName}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email" th:value="${email}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Delivery Address</label>
+                    <textarea class="form-control" name="address" rows="2" th:text="${address}"></textarea>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Preferred Delivery Date</label>
+                        <input type="date" class="form-control" name="deliveryDate" th:value="${deliveryDate}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Order Notes (Optional)</label>
+                        <textarea class="form-control" name="notes" rows="1" placeholder="Special instructions for delivery" th:text="${notes}"></textarea>
+                    </div>
+                </div>
+                <!-- Payment Method -->
+                <h5>Payment Method</h5>
+                <div class="mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="payment" value="Credit Card" checked>
+                        <label class="form-check-label">Credit Card</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="payment" value="PayPal">
+                        <label class="form-check-label">PayPal</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="payment" value="Cash on Delivery">
+                        <label class="form-check-label">Cash on Delivery</label>
+                    </div>
+                </div>
+                <!-- Order Summary -->
+                <h5>Order Summary</h5>
+                <table class="table table-bordered order-summary">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Author</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-summary-body">
+                        <!-- JS will fill this -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                            <td id="order-subtotal">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Shipping:</strong></td>
+                            <td id="order-shipping">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Grand Total:</strong></td>
+                            <td id="order-grandtotal">$0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <!-- Order Status -->
+                <div class="order-status p-3 mb-3 rounded">
+                    <strong>Status: Pending</strong>
+                    <div>Your order will be processed once confirmed.</div>
+                </div>
+                <!-- Terms and Confirm -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the Terms and Conditions and Privacy Policy
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg w-100">Confirm Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let currentUserId = localStorage.getItem('cartGuestId');
+    if (!currentUserId) {
+        currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('cartGuestId', currentUserId);
+    }
+
+    window.onload = function() {
+        fetch(`/api/cart/${currentUserId}`)
+            .then(res => res.json())
+            .then(items => renderOrderSummary(items));
+    };
+
+    function renderOrderSummary(items) {
+        let tbody = document.getElementById('order-summary-body');
+        let subtotal = 0;
+        tbody.innerHTML = '';
+        items.forEach(item => {
+            const total = item.price * item.quantity;
+            subtotal += total;
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.title}</td>
+                    <td>${item.author}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${total.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+        document.getElementById('order-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('order-shipping').textContent = '$5.00';
+        document.getElementById('order-grandtotal').textContent = `$${(subtotal + 5).toFixed(2)}`;
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Gather order data
+        const fullName = document.querySelector('input[name="fullName"]').value;
+        const email = document.querySelector('input[name="email"]').value;
+        const address = document.querySelector('textarea[name="address"]').value;
+        const deliveryDate = document.querySelector('input[name="deliveryDate"]').value;
+        const notes = document.querySelector('textarea[name="notes"]').value;
+        const payment = document.querySelector('input[name="payment"]:checked').value;
+
+        // Get cart items from API
+        fetch(`/api/cart/${currentUserId}`)
+            .then(res => res.json())
+            .then(items => {
+                // Here you can send the order to your backend if you want
+                // For demo, just show a confirmation message and clear the cart
+
+                // Clear the cart
+                fetch(`/api/cart/${currentUserId}/clear`, { method: 'DELETE' });
+
+                // Show confirmation
+                document.body.innerHTML = `
+                    <div class="container my-5">
+                        <div class="card shadow p-5 text-center">
+                            <h2 class="mb-4" style="color:#089da1;">Thank you for your order!</h2>
+                            <p>Your order has been placed and will be processed soon.</p>
+                            <div class="d-flex justify-content-center gap-3 mt-4">
+                                <a href="books.html" class="btn btn-success">Continue Shopping</a>
+                                <a href="myorders.html" class="btn btn-success">My Orders</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Send order to backend
+                fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUserId,
+                        fullName,
+                        email,
+                        address,
+                        deliveryDate,
+                        notes,
+                        payment,
+                        items
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('Order sent successfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error sending order:', error);
+                    });
+            });
+    });
+</script>
+</body>
+</html>

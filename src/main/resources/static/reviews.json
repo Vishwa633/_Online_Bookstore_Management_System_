@@ -1,0 +1,34 @@
+[
+    {
+        "reviewerName": "Alice Johnson",
+        "rating": 5,
+        "comment": "A wonderful and inspiring read!",
+        "bookId": "B001",
+        "bookname": "Atomic Habits",
+        "date": "2024-06-01"
+    },
+    {
+        "reviewerName": "Bob Lee",
+        "rating": 4,
+        "comment": "Great insights, very practical.",
+        "bookId": "B002",
+        "bookname": "Deep Work",
+        "date": "2024-06-02"
+    },
+    {
+        "reviewerName": "Cathy Smith",
+        "rating": 5,
+        "comment": "Couldn't put it down. Highly recommended.",
+        "bookId": "B003",
+        "bookname": "The Alchemist",
+        "date": "2024-06-03"
+    },
+    {
+        "reviewerName": "David Kim",
+        "rating": 4,
+        "comment": "A classic that everyone should read.",
+        "bookId": "B004",
+        "bookname": "To Kill a Mockingbird",
+        "date": "2024-06-04"
+    }
+] 

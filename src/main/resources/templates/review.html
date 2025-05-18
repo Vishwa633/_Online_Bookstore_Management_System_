@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Feedback</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 2rem; }
+        .container { max-width: 600px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+        h2 { text-align: center; color: #2563eb; }
+        .feedback-item { background: #f1f5f9; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>My Feedback</h2>
+        <div id="myFeedbackList"></div>
+    </div>
+    <script>
+        // Get email from query string
+        function getEmailFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('email');
+        }
+        const email = getEmailFromQuery();
+        if (!email) {
+            document.getElementById('myFeedbackList').innerHTML = 'No email provided.';
+        } else {
+            fetch('/api/feedback/all')
+            .then(res => res.json())
+            .then(allFeedback => {
+                const myFeedbacks = allFeedback.filter(fb => fb.email === email);
+                document.getElementById('myFeedbackList').innerHTML =
+                    myFeedbacks.length === 0
+                    ? 'No feedback found.'
+                    : myFeedbacks.map(fb => `<div class="feedback-item"><strong>${fb.date}:</strong> ${fb.message}</div>`).join('');
+            });
+        }
+    </script>
+</body>
+</html>

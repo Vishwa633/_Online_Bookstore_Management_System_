@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store Website</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .feedback-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #089da1;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .feedback-button:hover {
+            background-color: #067a7d;
+            transform: translateY(-2px);
+        }
+
+        .feedback-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+            z-index: 1001;
+        }
+
+        .feedback-form.active {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #089da1;
+            box-shadow: 0 0 0 3px rgba(8, 157, 161, 0.1);
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #4b5563;
+            font-size: 1.1rem;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4b5563;
+            padding: 0.5rem;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: #089da1;
+            color: white;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #067a7d;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .view-feedback-button {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            background-color: #089da1;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .view-feedback-button:hover {
+            background-color: #067a7d;
+            transform: translateY(-2px);
+        }
+        #viewFeedbackModal .form-header h2 {
+            font-size: 1.5rem;
+        }
+        #myFeedbackList .feedback-item {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            position: relative;
+        }
+        #myFeedbackList .feedback-item strong {
+            color: #089da1;
+        }
+        #myFeedbackList .no-feedback {
+            text-align: center;
+            color: #888;
+            margin-top: 2rem;
+        }
+        .delete-feedback-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .delete-feedback-btn:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <nav>
+            <div class="logo">
+                <img src="image/logo.png" alt="Book Store Logo">
+            </div>
+            <ul id="mainNavLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#" onclick="checkLogin('books.html'); return false;">Books</a></li>
+                <li><a href="#" onclick="checkLogin('reviews.html'); return false;">Reviews</a></li>
+                <li id="loginNavItem"><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+            <div class="social_icon" id="profileDropdownContainer">
+                <!-- Profile icon and dropdown will be injected here by JS -->
+            </div>
+        </nav>
+        <div class="main">
+            <div class="main_tag">
+                <h1>WELCOME TO<br><span>BOOK STORE</span></h1>
+                <p>
+                    Discover a world of knowledge and imagination at our bookstore. We offer a vast collection of books across various genres, from bestsellers to rare finds. Start your reading journey with us today!
+                </p>
+                <a href="about.html" class="main_btn">Learn More</a>
+            </div>
+            <div class="main_img">
+                <img src="image/table.png" alt="Bookstore interior">
+            </div>
+        </div>
+    </section>
+    <!--Services-->
+    <div class="services">
+        <div class="services_box">
+            <div class="services_card">
+                <i class="fa-solid fa-truck-fast"></i>
+                <h3>Fast Delivery</h3>
+                <p>Get your books delivered to your doorstep within 2-3 business days.</p>
+            </div>
+            <div class="services_card">
+                <i class="fa-solid fa-headset"></i>
+                <h3>24 x 7 Services</h3>
+                <p>Our customer support team is available round the clock to assist you.</p>
+            </div>
+            <div class="services_card">
+                <i class="fa-solid fa-tag"></i>
+                <h3>Best Deal</h3>
+                <p>Enjoy competitive prices and regular discounts on all books.</p>
+            </div>
+            <div class="services_card">
+                <i class="fa-solid fa-lock"></i>
+                <h3>Secure Payment</h3>
+                <p>Shop with confidence using our secure payment gateway.</p>
+            </div>
+        </div>
+    </div>
+    <!--Footer-->
+    <footer>
+        <div class="footer_main">
+            <div class="tag">
+                <img src="image/logo.png" alt="Book Store Logo">
+                <p>
+                    Your one-stop destination for all your reading needs. Explore our vast collection and enjoy a seamless book shopping experience!
+                </p>
+            </div>
+            <div class="tag">
+                <h1>Quick Link</h1>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="login.html">Books</a>
+                <a href="login.html">Reviews</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+            <div class="tag">
+                <h1>Contact Info</h1>
+                <a href="#"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+                <a href="#"><i class="fa-solid fa-phone"></i>+94 32 444 699</a>
+                <a href="#"><i class="fa-solid fa-envelope"></i>bookstore123@gmail.com</a>
+            </div>
+            <div class="tag">
+                <h1>Follow Us</h1>
+                <div class="social_link">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-twitter"></i>
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </div>
+            </div>
+            <div class="tag">
+                <h1>Newsletter</h1>
+                <div class="search_bar">
+                    <input type="text" placeholder="Your email id here">
+                    <button type="submit">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <p class="end">Design By<span><i class="fa-solid fa-face-grin"></i> Progect Group 10</span></p>
+    </footer>
+    <button class="feedback-button" onclick="toggleFeedbackForm()">
+        <i class="fa-solid fa-comment"></i> Add Your Feedback
+    </button>
+    <button class="view-feedback-button" onclick="toggleViewFeedback()">
+        <i class="fa-solid fa-eye"></i>    View Feedbacks
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="overlay" id="viewFeedbackOverlay"></div>
+    
+    <div class="feedback-form" id="feedbackFormModal">
+        <button class="close-button" onclick="toggleFeedbackForm()">&times;</button>
+        <div class="form-header">
+            <h2>Share Your Feedback</h2>
+            <p>We value your thoughts and suggestions to improve our bookstore experience</p>
+        </div>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name" class="required-field">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="email" class="required-field">Email Address</label>
+                <input type="email" id="email" name="email" readonly>
+            </div>
+            <div class="form-group">
+                <label for="message" class="required-field">Your Feedback</label>
+                <textarea id="message" name="message" placeholder="Please share your thoughts, suggestions, or concerns..." required></textarea>
+            </div>
+            <button type="submit" class="submit-button">Submit Feedback</button>
+        </form>
+    </div>
+
+    <div class="feedback-form" id="viewFeedbackModal" style="display:none;">
+        <button class="close-button" onclick="toggleViewFeedback()">&times;</button>
+        <div class="form-header">
+            <h2>All User Feedbacks</h2>
+        </div>
+        <div id="myFeedbackList"></div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin(targetPage) {
+            if (!localStorage.getItem('user')) {
+                alert('Please login first to access this page');
+                window.location.href = 'login.html';
+            } else {
+                window.location.href = targetPage;
+            }
+        }
+
+        // Check login status on page load
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                // Update navigation to show logged-in state
+                document.querySelector('a[href="login.html"]').textContent = 'Logout';
+                document.querySelector('a[href="login.html"]').onclick = function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+                // Hide Register button for logged-in users
+                var registerLink = document.querySelector('a[href="register.html"]');
+                if (registerLink) {
+                    registerLink.style.display = 'none';
+                }
+                // Show Manage Books tab for admin
+                var navList = document.querySelector('nav ul');
+                if (navList) {
+                    // Remove existing Manage Books tab if any
+                    var existingManage = document.querySelector('a[href="managebooks.html"]');
+                    if (existingManage) existingManage.parentElement.remove();
+                    var userObj = JSON.parse(user);
+                    if (userObj.role && userObj.role.toUpperCase() === 'ADMIN') {
+                        var li = document.createElement('li');
+                        var a = document.createElement('a');
+                        a.href = 'managebooks.html';
+                        a.textContent = 'Manage Books';
+                        li.appendChild(a);
+                        navList.appendChild(li);
+                    }
+                }
+            }
+            // Hide Login tab if user is logged in
+            var loginNavItem = document.getElementById('loginNavItem');
+            if (user && loginNavItem) {
+                loginNavItem.style.display = 'none';
+            }
+        }
+
+        function toggleFeedbackForm() {
+            const modal = document.getElementById('feedbackFormModal');
+            const overlay = document.getElementById('overlay');
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            
+            if (!currentUser) {
+                alert('Please login first to submit feedback');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Set the email field with the logged-in user's email
+            document.getElementById('email').value = currentUser.email;
+            
+            modal.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Attach feedback form submit handler ONCE
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const feedback = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+            try {
+                const response = await fetch('/api/feedback/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(feedback)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message || 'Thank you for your feedback!');
+                    this.reset();
+                    toggleFeedbackForm(); // Close the form
+                    // Refresh the feedback list if it's open
+                    if (document.getElementById('viewFeedbackModal').style.display === 'block') {
+                        renderMyFeedback();
+                    }
+                } else {
+                    alert(result.message || 'Failed to submit feedback. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                alert('An error occurred while submitting feedback. Please try again.');
+            }
+        });
+
+        // Close form when clicking outside
+        document.getElementById('overlay').addEventListener('click', toggleFeedbackForm);
+
+        function toggleViewFeedback() {
+            const modal = document.getElementById('viewFeedbackModal');
+            const overlay = document.getElementById('viewFeedbackOverlay');
+            if (modal.style.display === 'none' || !modal.style.display) {
+                renderMyFeedback();
+                modal.style.display = 'block';
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.style.display = 'none';
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        document.getElementById('viewFeedbackOverlay').addEventListener('click', toggleViewFeedback);
+
+        function renderMyFeedback() {
+            const feedbackList = document.getElementById('myFeedbackList');
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            
+            fetch('/api/feedback/all')
+                .then(response => response.json())
+                .then(feedbacks => {
+                    if (feedbacks.length === 0) {
+                        feedbackList.innerHTML = '<div class="no-feedback">No feedbacks have been submitted yet.</div>';
+                        return;
+                    }
+                    
+                    feedbackList.innerHTML = feedbacks.map(fb => {
+                        // Only show delete button if user is logged in AND the feedback email matches the user's email
+                        const canDelete = currentUser && currentUser.email && fb.email === currentUser.email;
+                        
+                        return `
+                            <div class="feedback-item">
+                                <strong>Date:</strong> ${fb.date || 'N/A'}<br>
+                                <strong>Name:</strong> ${fb.name || 'Anonymous'}<br>
+                                <strong>Email:</strong> ${fb.email || 'N/A'}<br>
+                                <strong>Message:</strong> ${fb.message || ''}
+                                ${canDelete ? 
+                                    `<button class="delete-feedback-btn" onclick="deleteFeedback(${fb.id}, '${fb.email}')" title="Delete this feedback">
+                                        <i class="fas fa-trash"></i>
+                                    </button>` 
+                                    : ''}
+                            </div>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    console.error('Error fetching feedback:', error);
+                    feedbackList.innerHTML = '<div class="no-feedback">Error loading feedback. Please try again.</div>';
+                });
+        }
+
+        async function deleteFeedback(feedbackId, feedbackEmail) {
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            
+            // Strict check for user login and email match
+            if (!currentUser || !currentUser.email) {
+                alert('Please log in to delete feedback');
+                return;
+            }
+
+            if (currentUser.email !== feedbackEmail) {
+                alert('You can only delete your own feedback');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this feedback?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/feedback/${feedbackId}?email=${encodeURIComponent(currentUser.email)}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    renderMyFeedback(); // Refresh the feedback list
+                } else {
+                    alert(result.message || 'Failed to delete feedback');
+                }
+            } catch (error) {
+                console.error('Error deleting feedback:', error);
+                alert('An error occurred while deleting the feedback');
+            }
+        }
+
+        // Profile dropdown logic
+        function renderProfileDropdown() {
+            const container = document.getElementById('profileDropdownContainer');
+            let user = localStorage.getItem('user');
+            let dropdownHTML = `
+                <div class="profile-dropdown">
+                    <i class="fa-solid fa-user-circle" id="profileIcon" style="font-size:2rem;cursor:pointer;"></i>
+                    <div class="dropdown-content" id="profileDropdownContent" style="display:none;position:absolute;right:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.15);border-radius:8px;min-width:240px;z-index:1001;padding:1rem;">
+            `;
+            if (user) {
+                user = JSON.parse(user);
+                dropdownHTML += `
+                    <div style='font-weight:600;font-size:1.1em;margin-bottom:0.5em;'><span style='color:#888;'>Name:</span> ${user.username || 'User'}</div>
+                    <div style='color:#666;margin-bottom:1em;'><span style='color:#888;'>Email:</span> ${user.email || ''}</div>
+                    <button id="logoutBtn" style="width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;">Logout</button>
+                `;
+                if (!user.role || user.role.toUpperCase() !== 'ADMIN') {
+                    dropdownHTML += `<button id="deleteAccountBtn" style="width:100%;background:#fff;color:#ef4444;padding:0.5em 0;border:1.5px solid #ef4444;border-radius:6px;cursor:pointer;">Delete Account</button>`;
+                }
+            } else {
+                dropdownHTML += `
+                    <button id="loginBtn" style="width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;">Login</button>
+                    <button id="registerBtn" style="width:100%;background:#fff;color:#089da1;padding:0.5em 0;border:1.5px solid #089da1;border-radius:6px;cursor:pointer;">Register</button>
+                `;
+            }
+            dropdownHTML += '</div></div>';
+            container.innerHTML = dropdownHTML;
+            // Toggle dropdown
+            document.getElementById('profileIcon').onclick = function(e) {
+                e.stopPropagation();
+                const dropdown = document.getElementById('profileDropdownContent');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            };
+            // Hide dropdown on outside click
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('profileDropdownContent');
+                if (dropdown) dropdown.style.display = 'none';
+            });
+            // Logout
+            if (document.getElementById('logoutBtn')) {
+                document.getElementById('logoutBtn').onclick = function() {
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+            }
+            // Delete Account
+            if (document.getElementById('deleteAccountBtn')) {
+                document.getElementById('deleteAccountBtn').onclick = async function() {
+                    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
+                    const username = user.username;
+                    try {
+                        const response = await fetch(`/api/users/delete/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                        const result = await response.text();
+                        if (response.ok) {
+                            alert('Account deleted successfully.');
+                            localStorage.removeItem('user');
+                            window.location.href = 'index.html';
+                        } else {
+                            alert(result || 'Failed to delete account.');
+                        }
+                    } catch (err) {
+                        alert('Error deleting account.');
+                    }
+                };
+            }
+            // Login/Register
+            if (document.getElementById('loginBtn')) {
+                document.getElementById('loginBtn').onclick = function() {
+                    window.location.href = 'login.html';
+                };
+            }
+            if (document.getElementById('registerBtn')) {
+                document.getElementById('registerBtn').onclick = function() {
+                    window.location.href = 'register.html';
+                };
+            }
+        }
+        // Call on load
+        renderProfileDropdown();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Reviews - Book Store</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .reviews-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 200px;
+            margin-top: 100px;
+            min-height: 70vh;
+        }
+
+        .review-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(8,157,161,0.10);
+            margin: 2rem 0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .review-form h2 {
+            color: #089da1;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #089da1;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .rating {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating i {
+            color: #ddd;
+            cursor: pointer;
+            font-size: 1.8rem;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .rating i:hover {
+            transform: scale(1.1);
+        }
+
+        .rating i:hover,
+        .rating i.active {
+            color: #ffd700;
+        }
+
+        .submit-btn {
+            background: #089da1;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #067a7d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(8,157,161,0.2);
+        }
+
+        .reviews-list {
+            margin-top: 3rem;
+        }
+
+        .reviews-list h2 {
+            color: #089da1;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .review-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .review-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .review-meta {
+            color: #666;
+            font-size: 0.95rem;
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .review-content {
+            color: #444;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            margin-top: 1rem;
+        }
+
+        .review-rating {
+            color: #ffd700;
+            margin: 0.8rem 0;
+            font-size: 1.2rem;
+        }
+
+        .no-reviews {
+            text-align: center;
+            color: #666;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .login-prompt h2 {
+            color: #089da1;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-prompt p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .login-prompt a {
+            color: #089da1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-prompt a:hover {
+            color: #067a7d;
+            text-decoration: underline;
+        }
+
+        /* Cart styles */
+        .cart-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #089da1;
+            color: #fff;
+            font-size: 0.85em;
+            padding: 2px 7px;
+            border-radius: 50%;
+            min-width: 22px;
+            text-align: center;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        section {
+            flex: 1;
+        }
+        footer {
+            margin-top: auto;
+        }
+
+        .delete-btn {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn i {
+            color: #e74c3c;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .delete-btn:hover i {
+            color: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .review-card {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <nav>
+            <div class="logo">
+                <img src="image/logo.png" alt="Book Store Logo">
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="books.html">Books</a></li>
+                <li><a href="reviews.html" class="active">Reviews</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+            <div class="social_icon" id="profileDropdownContainer">
+                <!-- Profile icon and dropdown will be injected here by JS -->
+            </div>
+        </nav>
+
+        <div class="reviews-container">
+            <div class="review-form">
+                <h2>Write a Review</h2>
+                <form id="reviewForm">
+                    <div class="form-group">
+                        <label for="bookSelect">Select Book</label>
+                        <select id="bookSelect" required>
+                            <option value="">Choose a book...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating</label>
+                        <div class="rating" id="ratingStars">
+                            <i class="fas fa-star" data-rating="1"></i>
+                            <i class="fas fa-star" data-rating="2"></i>
+                            <i class="fas fa-star" data-rating="3"></i>
+                            <i class="fas fa-star" data-rating="4"></i>
+                            <i class="fas fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Your Review</label>
+                        <textarea id="comment" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Review</button>
+                </form>
+            </div>
+
+            <div class="reviews-list">
+                <h2>Book Reviews</h2>
+                <div id="reviewsContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer_main">
+            <div class="tag">
+                <img src="image/logo.png" alt="Book Store Logo">
+                <p>
+                    Your one-stop destination for all your reading needs. Explore our vast collection and enjoy a seamless book shopping experience!
+                </p>
+            </div>
+            <div class="tag">
+                <h1>Quick Link</h1>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="books.html">Books</a>
+                <a href="reviews.html">Reviews</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+            <div class="tag">
+                <h1>Contact Info</h1>
+                <a href="tel:+94 12 345 6789"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+                <a href="tel:+94 32 444 699"><i class="fa-solid fa-phone"></i>+94 32 444 699</a>
+                <a href="mailto:bookstore123@gmail.com"><i class="fa-solid fa-envelope"></i>bookstore123@gmail.com</a>
+            </div>
+            <div class="tag">
+                <h1>Follow Us</h1>
+                <div class="social_link">
+                    <a href="https://www.facebook.com"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.twitter.com"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="end">Design By<span><i class="fa-solid fa-face-grin"></i> Project Group 10</span></p>
+    </footer>
+
+    <script>
+        let allReviews = [];
+        let allBooks = [];
+        let selectedRating = 0;
+        let currentUser = null;
+
+        // Load everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, initializing...');
+            loadCurrentUser();
+            loadBooks();
+            loadReviews();
+            setupRatingSystem();
+            updateNavigation();
+            renderProfileDropdown();
+        });
+
+        // Load current user
+        function loadCurrentUser() {
+            const userJson = localStorage.getItem('user');
+            if (userJson) {
+                try {
+                    currentUser = JSON.parse(userJson);
+                    console.log('Logged in user:', currentUser.username);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                    currentUser = null;
+                }
+            }
+        }
+
+        // Load books from JSON
+        async function loadBooks() {
+            try {
+                console.log('Loading books...');
+                const response = await fetch('books.json');
+                console.log('Books fetch response:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load books: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Books loaded:', data);
+                allBooks = data;
+                
+                if (!Array.isArray(allBooks) || allBooks.length === 0) {
+                    throw new Error('No books data available');
+                }
+                
+                console.log('Total books loaded:', allBooks.length);
+                populateBookDropdown();
+            } catch (error) {
+                console.error('Error loading books:', error);
+                document.getElementById('bookSelect').innerHTML = `<option value="">Error loading books: ${error.message}</option>`;
+            }
+        }
+
+        // Populate book dropdown
+        function populateBookDropdown() {
+            const select = document.getElementById('bookSelect');
+            select.innerHTML = '<option value="">Choose a book...</option>';
+            allBooks.forEach(book => {
+                const option = document.createElement('option');
+                option.value = book.id;
+                option.textContent = `${book.title} by ${book.author}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Load reviews
+        async function loadReviews() {
+            try {
+                console.log('Starting to load reviews...');
+                // Clear any existing reviews first
+                allReviews = [];
+                
+                // First try to get reviews from localStorage
+                const savedReviews = localStorage.getItem('bookReviews');
+                if (savedReviews) {
+                    try {
+                        const parsedReviews = JSON.parse(savedReviews);
+                        if (Array.isArray(parsedReviews)) {
+                            console.log('Found valid reviews in localStorage:', parsedReviews.length);
+                            allReviews = parsedReviews;
+                        } else {
+                            console.log('Invalid reviews format in localStorage');
+                            localStorage.removeItem('bookReviews'); // Clear invalid data
+                        }
+                    } catch (e) {
+                        console.error('Error parsing localStorage reviews:', e);
+                        localStorage.removeItem('bookReviews'); // Clear invalid data
+                    }
+                }
+
+                if (allReviews.length === 0) {
+                    console.log('Loading reviews from JSON file...');
+                    const response = await fetch('reviews.json');
+                    console.log('Reviews fetch response:', response.status, response.statusText);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Failed to load reviews: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Reviews loaded from file:', data);
+                    
+                    if (!Array.isArray(data)) {
+                        throw new Error('Invalid reviews data format');
+                    }
+                    
+                    // Mark pre-loaded reviews as not user-added
+                    allReviews = data.map(review => ({
+                        ...review,
+                        isUserAdded: false
+                    }));
+                    
+                    console.log('Reviews loaded successfully:', allReviews.length);
+                }
+                
+                console.log('Final reviews count:', allReviews.length);
+                displayReviews();
+            } catch (error) {
+                console.error('Error in loadReviews:', error);
+                document.getElementById('reviewsContainer').innerHTML = 
+                    `<div class="no-reviews">Error loading reviews: ${error.message}. Please try refreshing the page.</div>`;
+                allReviews = [];
+            }
+        }
+
+        // Setup rating system
+        function setupRatingSystem() {
+            const stars = document.querySelectorAll('#ratingStars i');
+            
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseover', function() {
+                    const rating = this.dataset.rating;
+                    updateStars(rating);
+                });
+
+                // Click to select
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars(selectedRating);
+                });
+            });
+
+            // Mouse leave effect
+            document.getElementById('ratingStars').addEventListener('mouseleave', () => {
+                updateStars(selectedRating);
+            });
+
+            // Form submission
+            document.getElementById('reviewForm').addEventListener('submit', handleReviewSubmission);
+        }
+
+        // Update star display
+        function updateStars(rating) {
+            document.querySelectorAll('#ratingStars i').forEach(star => {
+                const starRating = parseInt(star.dataset.rating);
+                if (starRating <= rating) {
+                    star.classList.add('active');
+                    star.style.color = '#ffd700';
+                } else {
+                    star.classList.remove('active');
+                    star.style.color = '#ddd';
+                }
+            });
+        }
+
+        // Display reviews
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = '';
+
+            console.log('Displaying reviews, total count:', allReviews.length);
+
+            if (!Array.isArray(allReviews) || allReviews.length === 0) {
+                console.log('No reviews to display');
+                container.innerHTML = '<div class="no-reviews">No reviews yet</div>';
+                return;
+            }
+
+            allReviews.forEach((review, index) => {
+                try {
+                    console.log(`Displaying review ${index}:`, review);
+                    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    
+                    // Get reviewer name - use username for user-added reviews, reviewerName for pre-loaded ones
+                    const reviewerName = review.isUserAdded ? review.username : (review.reviewerName || 'Anonymous');
+                    
+                    card.innerHTML = `
+                        <div class="review-header">
+                            <div class="review-title">${reviewerName}</div>
+                            <div class="review-meta">${review.date || 'Recent'}</div>
+                        </div>
+                        <div class="review-book">
+                            <strong>Book:</strong> ${review.bookname || 'Unknown Book'}
+                        </div>
+                        <div class="review-rating">
+                            ${stars}
+                        </div>
+                        <div class="review-content">
+                            ${review.comment || 'No comment provided'}
+                        </div>
+                        ${review.isUserAdded && currentUser && review.username === currentUser.username ? `
+                            <button class="delete-btn" title="Delete Review" data-index="${index}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        ` : ''}
+                    `;
+
+                    // Add delete button event listener only for user's own reviews
+                    if (review.isUserAdded && currentUser && review.username === currentUser.username) {
+                        const deleteBtn = card.querySelector('.delete-btn');
+                        if (deleteBtn) {
+                            deleteBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                deleteReview(index);
+                            });
+                        }
+                    }
+                    
+                    container.appendChild(card);
+                } catch (error) {
+                    console.error(`Error displaying review ${index}:`, error);
+                }
+            });
+        }
+
+        // Delete review function
+        function deleteReview(index) {
+            if (confirm('Are you sure you want to delete this review?')) {
+                console.log('Deleting review at index:', index);
+                
+                // Remove from array
+                allReviews.splice(index, 1);
+                console.log('Review removed from array');
+                
+                // Update localStorage
+                try {
+                    localStorage.setItem('bookReviews', JSON.stringify(allReviews));
+                    console.log('LocalStorage updated');
+                } catch (error) {
+                    console.error('Error saving to localStorage:', error);
+                }
+                
+                // Refresh display
+                displayReviews();
+                console.log('Display refreshed');
+            }
+        }
+
+        // Handle review submission
+        function handleReviewSubmission(e) {
+            e.preventDefault();
+            
+            // Check if user is logged in
+            if (!currentUser) {
+                alert('Please log in to add a review');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const bookId = document.getElementById('bookSelect').value;
+            const comment = document.getElementById('comment').value;
+
+            // Validation
+            if (!bookId) {
+                alert('Please select a book');
+                return;
+            }
+            if (!selectedRating) {
+                alert('Please select a rating');
+                return;
+            }
+            if (!comment) {
+                alert('Please write a review');
+                return;
+            }
+
+            // Get book details
+            const selectedBook = allBooks.find(book => book.id === bookId);
+            if (!selectedBook) {
+                alert('Invalid book selection');
+                return;
+            }
+
+            // Create review object
+            const review = {
+                username: currentUser.username,  // Store as username instead of reviewerName
+                rating: selectedRating,
+                comment: comment,
+                bookId: bookId,
+                bookname: selectedBook.title,
+                date: new Date().toISOString().split('T')[0],
+                isUserAdded: true
+            };
+
+            try {
+                // Add to reviews array
+                allReviews.unshift(review); // Add to beginning of array
+
+                // Save to localStorage
+                localStorage.setItem('bookReviews', JSON.stringify(allReviews));
+                
+                // Update display
+                displayReviews();
+
+                // Reset form
+                this.reset();
+                selectedRating = 0;
+                updateStars(0);
+
+                alert('Thank you for your review!');
+            } catch (error) {
+                console.error('Error saving review:', error);
+                alert('Sorry, there was an error saving your review. Please try again.');
+            }
+        }
+
+        // Update navigation based on login status
+        function updateNavigation() {
+            const loginLink = document.querySelector('a[href="login.html"]');
+            const registerLink = document.querySelector('a[href="register.html"]');
+            
+            if (currentUser) {
+                // User is logged in
+                loginLink.textContent = 'Logout';
+                loginLink.href = '#';
+                loginLink.onclick = (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+                registerLink.style.display = 'none';
+            } else {
+                // User is not logged in
+                loginLink.textContent = 'Login';
+                loginLink.href = 'login.html';
+                loginLink.onclick = null;
+                registerLink.style.display = 'block';
+            }
+        }
+
+        // Profile dropdown logic
+        function renderProfileDropdown() {
+            const container = document.getElementById('profileDropdownContainer');
+            let user = localStorage.getItem('user');
+            let dropdownHTML = `
+                <div class=\"profile-dropdown\">\n                    <i class=\"fa-solid fa-user-circle\" id=\"profileIcon\" style=\"font-size:2rem;cursor:pointer;\"></i>\n                    <div class=\"dropdown-content\" id=\"profileDropdownContent\" style=\"display:none;position:absolute;right:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.15);border-radius:8px;min-width:240px;z-index:1001;padding:1rem;\">\n            `;
+            if (user) {
+                user = JSON.parse(user);
+                dropdownHTML += `\n                    <div style='font-weight:600;font-size:1.1em;margin-bottom:0.5em;'><span style='color:#888;'>Name:</span> ${user.username || 'User'}</div>\n                    <div style='color:#666;margin-bottom:1em;'><span style='color:#888;'>Email:</span> ${user.email || ''}</div>\n                    <button id=\"logoutBtn\" style=\"width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;\">Logout</button>\n                `;
+                if (!user.role || user.role.toUpperCase() !== 'ADMIN') {
+                    dropdownHTML += `<button id=\"deleteAccountBtn\" style=\"width:100%;background:#fff;color:#ef4444;padding:0.5em 0;border:1.5px solid #ef4444;border-radius:6px;cursor:pointer;\">Delete Account</button>`;
+                }
+            } else {
+                dropdownHTML += `\n                    <button id=\"loginBtn\" style=\"width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;\">Login</button>\n                    <button id=\"registerBtn\" style=\"width:100%;background:#fff;color:#089da1;padding:0.5em 0;border:1.5px solid #089da1;border-radius:6px;cursor:pointer;\">Register</button>\n                `;
+            }
+            dropdownHTML += '</div></div>';
+            container.innerHTML = dropdownHTML;
+            // Toggle dropdown
+            document.getElementById('profileIcon').onclick = function(e) {
+                e.stopPropagation();
+                const dropdown = document.getElementById('profileDropdownContent');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            };
+            // Hide dropdown on outside click
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('profileDropdownContent');
+                if (dropdown) dropdown.style.display = 'none';
+            });
+            // Logout
+            if (document.getElementById('logoutBtn')) {
+                document.getElementById('logoutBtn').onclick = function() {
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+            }
+            // Delete Account
+            if (document.getElementById('deleteAccountBtn')) {
+                document.getElementById('deleteAccountBtn').onclick = async function() {
+                    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
+                    const username = user.username;
+                    try {
+                        const response = await fetch(`/api/users/delete/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                        const result = await response.text();
+                        if (response.ok) {
+                            alert('Account deleted successfully.');
+                            localStorage.removeItem('user');
+                            window.location.href = 'index.html';
+                        } else {
+                            alert(result || 'Failed to delete account.');
+                        }
+                    } catch (err) {
+                        alert('Error deleting account.');
+                    }
+                };
+            }
+            // Login/Register
+            if (document.getElementById('loginBtn')) {
+                document.getElementById('loginBtn').onclick = function() {
+                    window.location.href = 'login.html';
+                };
+            }
+            if (document.getElementById('registerBtn')) {
+                document.getElementById('registerBtn').onclick = function() {
+                    window.location.href = 'register.html';
+                };
+            }
+        }
+
+        localStorage.removeItem('bookReviews');
+
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            // Hide Login tab if user is logged in
+            var loginNavItem = document.getElementById('loginNavItem');
+            if (user && loginNavItem) {
+                loginNavItem.style.display = 'none';
+            }
+            // Show Manage Books tab for admin
+            var navList = document.querySelector('nav ul');
+            if (user && navList) {
+                var userObj = JSON.parse(user);
+                // Remove existing Manage Books tab if any
+                var existingManage = document.querySelector('a[href="managebooks.html"]');
+                if (existingManage) existingManage.parentElement.remove();
+                if (userObj.role && userObj.role.toUpperCase() === 'ADMIN') {
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = 'managebooks.html';
+                    a.textContent = 'Manage Books';
+                    li.appendChild(a);
+                    navList.appendChild(li);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

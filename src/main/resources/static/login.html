@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Book Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .login-container {
+            background: #fff;
+            padding: 2.5rem 5rem 1.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(8,157,161,0.10);
+            max-width: 370px;
+            width: 100%;
+            margin: 2rem;
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #089da1;
+            font-size: 2rem;
+            margin-bottom: 1.3rem;
+            font-weight: 700;
+        }
+        .login-container p.subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 1.2rem;
+            color: #222;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 1rem 1rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            background: #fafbfc;
+            transition: border 0.2s;
+        }
+        .login-container input[type="text"]:focus,
+        .login-container input[type="password"]:focus {
+            border: 1.5px solid #089da1;
+            outline: none;
+        }
+        .login-container button {
+    display: block;
+    width: 90%;
+    margin: 0.2rem auto 0.7rem auto;
+    background: #089da1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+        .login-container button:hover {
+            background: #067a7d;
+        }
+        .login-container .register-link {
+            text-align: center;
+            font-size: 0.98rem;
+            margin-bottom: 0.7rem;
+        }
+        .login-container .register-link a {
+            color: #089da1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .login-container .register-link a:hover {
+            color: #067a7d;
+            text-decoration: underline;
+        }
+        .login-container .footer-note {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.93rem;
+            margin-top: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login to Your Account</h2>
+        <p class="subtitle">Access your personalized book experience</p>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register here</a>
+        </div>
+        <div class="footer-note">
+            &copy; 2025 Online Book Store. All rights reserved.
+        </div>
+    </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            login(username, password);
+        });
+
+        async function login(username, password) {
+            try {
+                const response = await fetch('http://localhost:8080/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.text();
+                
+                if (response.ok) {
+                    const user = JSON.parse(data);
+                    localStorage.setItem('user', JSON.stringify(user));
+                    if (user.role === 'ADMIN') {
+                        window.location.href = 'admin-books.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    alert(data || 'Invalid username or password');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

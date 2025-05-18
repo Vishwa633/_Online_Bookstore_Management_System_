@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Online Book Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .register-container {
+            background: #fff;
+            padding: 2.5rem 5rem 1.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(8,157,161,0.10);
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem;
+        }
+        .register-container h2 {
+            text-align: center;
+            color: #089da1;
+            font-size: 2rem;
+            margin-bottom: 1.3rem;
+            font-weight: 700;
+        }
+        .register-container p.subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .register-container label {
+            display: block;
+            margin-bottom: 1.2rem;
+            color: #222;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        .register-container input[type="text"],
+        .register-container input[type="email"],
+        .register-container input[type="password"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            background: #fafbfc;
+            transition: border 0.2s;
+        }
+        .register-container input:focus {
+            border: 1.5px solid #089da1;
+            outline: none;
+        }
+        .register-container button {
+            display: block;
+            width: 90%;
+            margin: 0.2rem auto 0.7rem auto;
+            background: #089da1;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .register-container button:hover {
+            background: #067a7d;
+        }
+        .register-container .login-link {
+            text-align: center;
+            font-size: 0.98rem;
+            margin-bottom: 0.7rem;
+        }
+        .register-container .login-link a {
+            color: #089da1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .register-container .login-link a:hover {
+            color: #067a7d;
+            text-decoration: underline;
+        }
+        .register-container .footer-note {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.93rem;
+            margin-top: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create Your Account</h2>
+        <p class="subtitle">Join our community and start your reading journey</p>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+        <div class="footer-note">
+            &copy; 2025 Online Book Store. All rights reserved.
+        </div>
+    </div>
+    <script>
+    document.querySelector('form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const response = await fetch('http://localhost:8080/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        if (response.ok) {
+            alert('Registration successful! Please login.');
+            window.location.href = 'login.html';
+        } else {
+            alert('Registration failed!');
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Book Store</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <section>
+        <nav>
+            <div class="logo">
+                <img src="image/logo.png" alt="Book Store Logo">
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="#" onclick="checkLogin('books.html'); return false;">Books</a></li>
+                <li><a href="#" onclick="checkLogin('reviews.html'); return false;">Reviews</a></li>
+                <li id="loginNavItem"><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+            <div class="social_icon" id="profileDropdownContainer">
+                <!-- Profile icon and dropdown will be injected here by JS -->
+            </div>
+        </nav>
+        <div class="main about-main">
+            <div class="main_tag">
+                <h1>ABOUT<br><span>OUR BOOKSTORE</span></h1>
+                <p>
+                    Welcome to our Book Store! Founded in 2023, we are passionate about connecting readers with stories that inspire, educate, and entertain. Our mission is to offer a diverse selection of books, from timeless classics to the latest bestsellers, all in one welcoming place.
+                </p>
+                <p>
+                    We believe in the power of reading to transform lives and communities. Whether you're a lifelong book lover or just starting your reading journey, our team is here to help you discover your next great read.
+                </p>
+                <a href="index.html" class="main_btn">Back to Home</a>
+            </div>
+            <div class="main_img">
+                <img src="image/about.png" alt="About Bookstore">
+            </div>
+        </div>
+    </section>
+
+    <!--Footer-->
+    <footer>
+        <div class="footer_main">
+            <div class="tag">
+                <img src="image/logo.png" alt="Book Store Logo">
+                <p>
+                    Your one-stop destination for all your reading needs. Explore our vast collection and enjoy a seamless book shopping experience!
+                </p>
+            </div>
+            <div class="tag">
+                <h1>Quick Link</h1>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="#" onclick="checkLogin('books.html'); return false;">Books</a>
+                <a href="#" onclick="checkLogin('reviews.html'); return false;">Reviews</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+            <div class="tag">
+                <h1>Contact Info</h1>
+                <a href="tel:+94 12 345 6789"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+                <a href="tel:+94 32 444 699"><i class="fa-solid fa-phone"></i>+94 32 444 699</a>
+                <a href="mailto:bookstore123@gmail.com"><i class="fa-solid fa-envelope"></i>bookstore123@gmail.com</a>
+            </div>
+            <div class="tag">
+                <h1>Follow Us</h1>
+                <div class="social_link">
+                    <a href="https://www.facebook.com"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.twitter.com"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="tag">
+                <h1>Newsletter</h1>
+                <div class="search_bar">
+                    <input type="text" placeholder="Your email id here">
+                    <button type="submit">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <p class="end">Design By<span><i class="fa-solid fa-face-grin"></i> Progect Group 10</span></p>
+    </footer>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin(targetPage) {
+            if (!localStorage.getItem('user')) {
+                alert('Please login first to access this page');
+                window.location.href = 'login.html';
+            } else {
+                window.location.href = targetPage;
+            }
+        }
+
+        // Check login status on page load
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                // Update navigation to show logged-in state
+                document.querySelector('a[href="login.html"]').textContent = 'Logout';
+                document.querySelector('a[href="login.html"]').onclick = function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+                // Hide Register link for logged-in users
+                var registerLink = document.querySelector('a[href="register.html"]');
+                if (registerLink) {
+                    registerLink.parentElement.style.display = 'none';
+                }
+                // Show Manage Books tab for admin
+                var navList = document.querySelector('nav ul');
+                if (navList) {
+                    // Remove existing Manage Books tab if any
+                    var existingManage = document.querySelector('a[href="managebooks.html"]');
+                    if (existingManage) existingManage.parentElement.remove();
+                    var userObj = JSON.parse(user);
+                    if (userObj.role && userObj.role.toUpperCase() === 'ADMIN') {
+                        var li = document.createElement('li');
+                        var a = document.createElement('a');
+                        a.href = 'managebooks.html';
+                        a.textContent = 'Manage Books';
+                        li.appendChild(a);
+                        navList.appendChild(li);
+                    }
+                }
+            }
+        }
+
+        // Profile dropdown logic
+        function renderProfileDropdown() {
+            const container = document.getElementById('profileDropdownContainer');
+            let user = localStorage.getItem('user');
+            let dropdownHTML = `
+                <div class=\"profile-dropdown\">\n                    <i class=\"fa-solid fa-user-circle\" id=\"profileIcon\" style=\"font-size:2rem;cursor:pointer;\"></i>\n                    <div class=\"dropdown-content\" id=\"profileDropdownContent\" style=\"display:none;position:absolute;right:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.15);border-radius:8px;min-width:240px;z-index:1001;padding:1rem;\">\n            `;
+            if (user) {
+                user = JSON.parse(user);
+                dropdownHTML += `\n                    <div style='font-weight:600;font-size:1.1em;margin-bottom:0.5em;'><span style='color:#888;'>Name:</span> ${user.username || 'User'}</div>\n                    <div style='color:#666;margin-bottom:1em;'><span style='color:#888;'>Email:</span> ${user.email || ''}</div>\n                    <button id=\"logoutBtn\" style=\"width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;\">Logout</button>\n                `;
+                if (!user.role || user.role.toUpperCase() !== 'ADMIN') {
+                    dropdownHTML += `<button id=\"deleteAccountBtn\" style=\"width:100%;background:#fff;color:#ef4444;padding:0.5em 0;border:1.5px solid #ef4444;border-radius:6px;cursor:pointer;\">Delete Account</button>`;
+                }
+            } else {
+                dropdownHTML += `\n                    <button id=\"loginBtn\" style=\"width:100%;background:#089da1;color:#fff;padding:0.5em 0;border:none;border-radius:6px;cursor:pointer;margin-bottom:0.5em;\">Login</button>\n                    <button id=\"registerBtn\" style=\"width:100%;background:#fff;color:#089da1;padding:0.5em 0;border:1.5px solid #089da1;border-radius:6px;cursor:pointer;\">Register</button>\n                `;
+            }
+            dropdownHTML += '</div></div>';
+            container.innerHTML = dropdownHTML;
+            // Toggle dropdown
+            document.getElementById('profileIcon').onclick = function(e) {
+                e.stopPropagation();
+                const dropdown = document.getElementById('profileDropdownContent');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            };
+            // Hide dropdown on outside click
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('profileDropdownContent');
+                if (dropdown) dropdown.style.display = 'none';
+            });
+            // Logout
+            if (document.getElementById('logoutBtn')) {
+                document.getElementById('logoutBtn').onclick = function() {
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+            }
+            // Delete Account
+            if (document.getElementById('deleteAccountBtn')) {
+                document.getElementById('deleteAccountBtn').onclick = async function() {
+                    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
+                    const username = user.username;
+                    try {
+                        const response = await fetch(`/api/users/delete/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                        const result = await response.text();
+                        if (response.ok) {
+                            alert('Account deleted successfully.');
+                            localStorage.removeItem('user');
+                            window.location.href = 'index.html';
+                        } else {
+                            alert(result || 'Failed to delete account.');
+                        }
+                    } catch (err) {
+                        alert('Error deleting account.');
+                    }
+                };
+            }
+            // Login/Register
+            if (document.getElementById('loginBtn')) {
+                document.getElementById('loginBtn').onclick = function() {
+                    window.location.href = 'login.html';
+                };
+            }
+            if (document.getElementById('registerBtn')) {
+                document.getElementById('registerBtn').onclick = function() {
+                    window.location.href = 'register.html';
+                };
+            }
+        }
+        // Call on load
+        renderProfileDropdown();
+    </script>
+</body>
+</html>
