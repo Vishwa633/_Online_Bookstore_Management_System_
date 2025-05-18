@@ -1,0 +1,140 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 40px;
+    color: #1e293b;
+    text-align: center;
+}
+
+h1 {
+    color: #343a40;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+form {
+    max-width: 600px;
+    margin: auto;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label,
+textarea,
+input {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+}
+
+textarea,
+input[type="text"],
+input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 40px;
+    color: #1e293b;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #0f172a;
+}
+
+a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Table Styling */
+table {
+    margin: 0 auto;
+    width: 95%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+th {
+    background: linear-gradient(to right, #6366f1, #3b82f6);
+    color: white;
+    padding: 14px 16px;
+    font-size: 16px;
+    text-align: left;
+}
+
+td {
+    padding: 12px 16px;
+    border-top: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+tr:hover td {
+    background-color: #f9fafb;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+td a {
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+label, .actions {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+/* Optional: make text wrap nicely */
+td, th {
+    word-break: break-word;
+}
+
+/* Optional: rounded corners on first and last columns */
+tr:first-child th:first-child {
+    border-top-left-radius: 16px;
+}
+tr:first-child th:last-child {
+    border-top-right-radius: 16px;
+}
+
+
