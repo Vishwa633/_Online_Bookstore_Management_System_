@@ -20,7 +20,7 @@ public class ReviewManager {
         if (review.getRating() < 1 || review.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
-        reviews.addFirst(review); // Add new reviews at the start of the list
+        reviews.addFirst(review); 
     }
 
     // Remove a review
@@ -30,7 +30,7 @@ public class ReviewManager {
 
     // Get all reviews
     public List<Review> getAllReviews() {
-        return new LinkedList<>(reviews); // Return a copy to prevent external modifications
+        return new LinkedList<>(reviews); 
     }
 
     // Get reviews for a specific book
