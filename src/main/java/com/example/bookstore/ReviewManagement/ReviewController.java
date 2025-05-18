@@ -44,8 +44,7 @@ public class ReviewController {
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable String reviewId) {
-        // Note: In a real application, you would need to implement a way to identify reviews
-        // This is a simplified version
+       
         return ResponseEntity.ok().build();
     }
 } 
