@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Author</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            padding: 40px;
+        }
+
+        .register-container {
+            max-width: 600px;
+            background: white;
+            margin: 0 auto;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .register-container h1 {
+            text-align: center;
+            color: #089da1;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #089da1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(8, 157, 161, 0.1);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background-color: #089da1;
+            color: white;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #067a7d;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <h1><i class="fas fa-user-edit"></i> Register Author</h1>
+    <form action="/authors/register" method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="biography">Biography</label>
+            <textarea id="biography" name="biography" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="books">Books (comma-separated)</label>
+            <input type="text" id="books" name="books" required>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Author Type</label>
+            <select id="type" name="type" onchange="toggleFields(this.value)">
+                <option value="GuestAuthor">GuestAuthor</option>
+                <option value="PermanentAuthor">PermanentAuthor</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="guestFields">
+            <label for="affiliation">Affiliation</label>
+            <input type="text" id="affiliation" name="affiliation">
+        </div>
+
+        <div class="form-group" id="permFields" style="display:none;">
+            <label for="hireDate">Hire Date</label>
+            <input type="date" id="hireDate" name="hireDate">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    function toggleFields(value) {
+        document.getElementById('guestFields').style.display = value === 'GuestAuthor' ? 'block' : 'none';
+        document.getElementById('permFields').style.display = value === 'PermanentAuthor' ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>
