@@ -17,13 +17,10 @@ public class BookController {
 
     @GetMapping
     public List<Book> getBooks(@RequestParam(required = false) String sortBy) {
-        List<Book> books = bookService.getAllBooksSortedByTitle();
-        if ("author".equals(sortBy)) {
-            // Implement and call quickSortByAuthor
-        } else if ("price".equals(sortBy)) {
-            // Implement and call quickSortByPrice
+        if ("price".equals(sortBy)) {
+            return bookService.getAllBooksSortedByPrice();
         }
-        return books;
+        return bookService.getAllBooksSortedByTitle();
     }
 
     @PostMapping
