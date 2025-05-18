@@ -27,6 +27,12 @@ public class BookService {
         return books;
     }
 
+    public List<Book> getAllBooksSortedByPrice() {
+        List<Book> books = repository.getAllBooks();
+        BookQuickSort.quickSortByPrice(books, 0, books.size() - 1);
+        return books;
+    }
+
     public void removeBook(int id) {
         repository.removeBook(id);
     }
