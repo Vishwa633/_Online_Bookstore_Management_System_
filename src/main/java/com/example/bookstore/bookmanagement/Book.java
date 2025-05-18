@@ -1,7 +1,7 @@
 package com.example.bookstore.bookmanagement;
 
 public class Book {
-    private int id;
+    private int id
     private String title;
     private String author;
     private double price;
@@ -9,12 +9,13 @@ public class Book {
 
     public Book() {}
 
-    public Book(int id, String title, String author, double price) {
-        this.id = id;
+     public Book(String title, String author, double price, String image) {
         this.title = title;
         this.author = author;
         this.price = price;
+        this.image = image;
     }
+    
 
     public Book(int id, String title, String author, double price, String image) {
         this(id, title, author, price);
