@@ -3,10 +3,6 @@ package com.example.bookstore.cartmanagement;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Cart class using LinkedList to store cart items
- * Demonstrates LinkedList usage and encapsulation
- */
 public class Cart {
     private List<CartItem> items;
     private String userId;
