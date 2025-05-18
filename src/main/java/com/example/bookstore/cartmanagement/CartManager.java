@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 
-/**
- * CartManager class to handle cart operations
- * Demonstrates polymorphism and encapsulation
- */
 @Component
 public class CartManager {
     private Map<String, Cart> userCarts = new HashMap<>();
