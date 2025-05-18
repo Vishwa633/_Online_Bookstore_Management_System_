@@ -1,8 +1,5 @@
 package com.example.bookstore.cartmanagement;
 
-/**
- * Base class for book cart items implementing CartItem interface
- */
 public class BookCartItem implements CartItem {
     private int id;
     private String title;
