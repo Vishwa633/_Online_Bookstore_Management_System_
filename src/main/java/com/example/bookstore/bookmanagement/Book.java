@@ -18,8 +18,8 @@ public class Book {
     
 
     public Book(int id, String title, String author, double price, String image) {
-        this(id, title, author, price);
-        this.image = image;
+        this(title, author, price, image); // Call the other constructor
+        this.id = id;
     }
 
     // Encapsulation: Getters and Setters
