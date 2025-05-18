@@ -1,8 +1,5 @@
 package com.example.bookstore.cartmanagement;
 
-/**
- * Interface defining the contract for cart items
- */
 public interface CartItem {
     int getId();
     String getTitle();
