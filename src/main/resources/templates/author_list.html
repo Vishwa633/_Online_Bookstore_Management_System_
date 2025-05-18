@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Author List</title>
+
+    <!-- Favicon & Fonts -->
+    <link rel="icon" type="image/x-icon" th:href="@{/image/favicon.png}" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/style1.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<section>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img th:src="@{/image/logo.png}" alt="Book Store Logo">
+        </div>
+        <ul id="mainNavLinks">
+            <li><a th:href="@{/index.html}">Home</a></li>
+            <li><a th:href="@{/about.html}">About</a></li>
+            <li><a href="#" onclick="checkLogin('books.html'); return false;">Books</a></li>
+            <li><a href="#" onclick="checkLogin('reviews.html'); return false;">Reviews</a></li>
+            <li id="loginNavItem"><a th:href="@{/login.html}">Login</a></li>
+            <li><a th:href="@{/register.html}">Register</a></li>
+            <li><a th:href="@{/authors}">Authors</a></li>
+        </ul>
+        <div class="social_icon" id="profileDropdownContainer"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <div></div>
+    <div class="main-content">
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-8 mt-6">
+        <div class="author-header">
+            <h1>All Authors</h1>
+            <a href="/authors/register" class="add-author-btn">
+                <i class="fas fa-user-plus"></i> Register New Author
+            </a>
+        </div>
+
+
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Biography</th>
+                <th>Books</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody th:each="author : ${authors}">
+            <tr>
+                <td th:text="${author.name}"></td>
+                <td th:text="${author.biography}"></td>
+                <td th:text="${#strings.arrayJoin(author.books, ', ')}"></td>
+                <td th:text="${author.authorType}"></td>
+                <td>
+                    <a th:href="@{'/authors/edit/' + ${author.name}}" class="text-[#089da1] hover:underline">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    |
+                    <a th:href="@{'/authors/delete/' + ${author.name}}" class="text-red-500 hover:underline">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</section>
+
+<!-- Feedback Button -->
+<button class="feedback-button" onclick="toggleFeedbackForm()">
+    <i class="fa-solid fa-comment"></i> Add Your Feedback
+</button>
+<button class="view-feedback-button" onclick="toggleViewFeedback()">
+    <i class="fa-solid fa-eye"></i> View Feedbacks
+</button>
+
+<div class="overlay" id="overlay" onclick="toggleFeedbackForm()"></div>
+<div class="overlay" id="viewFeedbackOverlay" onclick="toggleViewFeedback()"></div>
+
+<!-- Feedback Form -->
+<div class="feedback-form" id="feedbackFormModal">
+    <button class="close-button" onclick="toggleFeedbackForm()">&times;</button>
+    <div class="form-header">
+        <h2>Submit Feedback</h2>
+        <p>We value your input!</p>
+    </div>
+    <form id="feedbackForm">
+        <div class="form-group">
+            <label for="name" class="required-field">Name</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email" class="required-field">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="message" class="required-field">Message</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="submit-button">Send Feedback</button>
+    </form>
+</div>
+
+<!-- View Feedback Modal -->
+<div class="feedback-form" id="viewFeedbackModal">
+    <button class="close-button" onclick="toggleViewFeedback()">&times;</button>
+    <div class="form-header">
+        <h2>All User Feedbacks</h2>
+    </div>
+    <div id="myFeedbackList"></div>
+</div>
+
+<script>
+    function toggleFeedbackForm() {
+        const modal = document.getElementById('feedbackFormModal');
+        const overlay = document.getElementById('overlay');
+        modal.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function toggleViewFeedback() {
+        const modal = document.getElementById('viewFeedbackModal');
+        const overlay = document.getElementById('viewFeedbackOverlay');
+        modal.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+    }
+</script>
+</body>
+</html>

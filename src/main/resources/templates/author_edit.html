@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Author</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body style="background-color: #f3f4f6; font-family: 'Inter', sans-serif;">
+<div style="max-width: 600px; margin: 50px auto; background: #fff; padding: 2rem 2.5rem; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);">
+    <h2 style="text-align: center; color: #089da1; margin-bottom: 1.5rem;"><i class="fas fa-user-edit"></i> Edit Author</h2>
+
+    <form action="/authors/update" method="post">
+        <input type="hidden" name="name" th:value="${author.name}"/>
+
+        <div class="form-group">
+            <label for="biography">Biography</label>
+            <textarea id="biography" name="biography" th:text="${author.biography}" class="styled-input" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="books">Books (comma-separated)</label>
+            <input type="text" id="books" name="books" th:value="${#strings.arrayJoin(author.books, ',')}" class="styled-input" required>
+        </div>
+
+        <input type="hidden" name="type" th:value="${author.authorType}"/>
+
+        <div th:if="${author.authorType == 'GuestAuthor'}" class="form-group">
+            <label for="affiliation">Affiliation</label>
+            <input type="text" id="affiliation" name="affiliation" th:value="${author.affiliation}" class="styled-input">
+        </div>
+
+        <div th:if="${author.authorType == 'PermanentAuthor'}" class="form-group">
+            <label for="hireDate">Hire Date</label>
+            <input type="date" id="hireDate" name="hireDate" th:value="${author.hireDate}" class="styled-input">
+        </div>
+
+        <button type="submit" class="submit-button">Update</button>
+    </form>
+</div>
+
+
+<style>
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+    }
+    .styled-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+    }
+    .styled-input:focus {
+        outline: none;
+        border-color: #089da1;
+        box-shadow: 0 0 0 3px rgba(8, 157, 161, 0.1);
+    }
+    .submit-button {
+        display: block;
+        width: 100%;
+        background-color: #089da1;
+        color: white;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.2s ease;
+    }
+    .submit-button:hover {
+        background-color: #067a7d;
+    }
+</style>
+</body>
+</html>
