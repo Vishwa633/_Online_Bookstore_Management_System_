@@ -26,16 +26,7 @@ public class CustomLinkedList {
         size++;
     }
 
-    public Book get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
-        BookNode current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.getNext();
-        }
-        return current.getData();
-    }
+    
 
     public Book getById(int id) {
         BookNode current = head;
