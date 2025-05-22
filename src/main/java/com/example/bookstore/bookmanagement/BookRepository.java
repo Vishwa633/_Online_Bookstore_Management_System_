@@ -1,14 +1,15 @@
 package com.example.bookstore.bookmanagement;
 
-import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class BookRepository {
-    private final List<Book> books = new LinkedList<>();
+    private final CustomLinkedList books;
 
     public BookRepository() {
+        books = new CustomLinkedList();
+        // Initialize with some sample books
         books.add(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", 19.99, "image/book1.jpg"));
         books.add(new Book(2, "To Kill a Mockingbird", "Harper Lee", 15.99, "image/book2.jpg"));
         books.add(new Book(3, "1984", "George Orwell", 14.99, "image/book3.jpg"));
@@ -37,24 +38,18 @@ public class BookRepository {
     }
 
     public List<Book> getAllBooks() {
-        return books;
+        return books.getAllBooks();
     }
 
     public Book getBookById(int id) {
-        return books.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
+        return books.getById(id);
     }
 
     public void removeBook(int id) {
-        books.removeIf(b -> b.getId() == id);
+        books.remove(id);
     }
 
     public Book updateBook(Book updatedBook) {
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getId() == updatedBook.getId()) {
-                books.set(i, updatedBook);
-                return updatedBook;
-            }
-        }
-        return null;
+        return books.update(updatedBook);
     }
 } 
