@@ -1,15 +1,14 @@
 package com.example.bookstore.cartmanagement;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class Cart {
-    private List<CartItem> items;
+    private CustomCartList items;
     private String userId;
 
     public Cart(String userId) {
         this.userId = userId;
-        this.items = new LinkedList<>();
+        this.items = new CustomCartList();
     }
 
     // Add item to cart
@@ -25,44 +24,32 @@ public class Cart {
 
     // Remove item from cart
     public boolean removeItem(int itemId) {
-        return items.removeIf(item -> item.getId() == itemId);
+        return items.remove(itemId);
     }
 
     // Update item quantity
     public boolean updateQuantity(int itemId, int quantity) {
-        CartItem item = findItemById(itemId);
-        if (item != null) {
-            item.setQuantity(quantity);
-            return true;
-        }
-        return false;
+        return items.updateQuantity(itemId, quantity);
     }
 
     // Find item by ID
     public CartItem findItemById(int itemId) {
-        return items.stream()
-                .filter(item -> item.getId() == itemId)
-                .findFirst()
-                .orElse(null);
+        return items.findById(itemId);
     }
 
     // Get all items
     public List<CartItem> getItems() {
-        return new LinkedList<>(items); // Return a copy for encapsulation
+        return items.getAllItems();
     }
 
     // Get total number of items
     public int getTotalItems() {
-        return items.stream()
-                .mapToInt(CartItem::getQuantity)
-                .sum();
+        return items.getTotalItems();
     }
 
     // Calculate total price
     public double getTotalPrice() {
-        return items.stream()
-                .mapToDouble(CartItem::getSubtotal)
-                .sum();
+        return items.getTotalPrice();
     }
 
     // Clear cart
@@ -84,7 +71,7 @@ public class Cart {
     public String toString() {
         return "Cart{" +
                 "userId='" + userId + '\'' +
-                ", items=" + items +
+                ", items=" + items.getAllItems() +
                 ", totalItems=" + getTotalItems() +
                 ", totalPrice=" + getTotalPrice() +
                 '}';
