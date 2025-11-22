@@ -46,7 +46,7 @@ It is built using **Java** with **file handling** (no database) and demonstrates
 | Category | Technologies |
 |----------|--------------|
 | Backend  | Java, Spring Boot (optional) |
-| Frontend | HTML, CSS, Bootstrap |
+| Frontend | HTML, CSS |
 | Data Storage | Text files (file handling) |
 | Build Tool | Gradle / Maven |
 | Version Control | Git & GitHub |
