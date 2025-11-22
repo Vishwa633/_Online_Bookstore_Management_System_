@@ -7,7 +7,7 @@ Manage books, users, borrow/return operations, authors, admin, and reviews effic
   <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" />
   <img src="https://img.shields.io/badge/Backend-Java%20(Spring Boot)-blue?style=flat-square" />
   <img src="https://img.shields.io/badge/Frontend-HTML%2FCSS-orange?style=flat-square" />
-  <img src="https://img.shields.io/badge/Build-Gradle-green?style=flat-square" />
+  <img src="https://img.shields.io/badge/Build-Maven-green?style=flat-square" />
 </p>
 
 ---
