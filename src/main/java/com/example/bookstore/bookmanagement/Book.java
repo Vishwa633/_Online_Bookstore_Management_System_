@@ -1,7 +1,7 @@
 package com.example.bookstore.bookmanagement;
 
 public class Book {
-    private int id
+    private int id;
     private String title;
     private String author;
     private double price;
